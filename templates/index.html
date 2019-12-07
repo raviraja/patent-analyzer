@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html ng-app="PatentAnalysisApp">
+
+<head>
+  <meta charset="utf-8">
+  <title>Patent Analysis</title>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='directive.js') }}"></script>
+  <script src="{{ url_for('static', filename='patent.controller.js') }}"></script>
+  <script src="{{ url_for('static', filename='service.js') }}"></script>
+  <link rel="stylesheet"  href="{{ url_for('static', filename='style.css') }}"></script>
+</head>
+
+<body ng-controller="PatentController">
+  <!--<div class="container text-center" ng-if="dataLoading">
+      <img src="{{url_for('static', filename='giphy.gif')}}" />
+  </div>-->
+  <div class="col-md-12 text-center">
+    <h1>Patent Stats & analysis</h1>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form>
+          <div class="form-group">
+            <label for="myFileField">Select a file: </label>
+            <input type="file" demo-file-model="myFile" class="form-control" id="myFileField" />
+          </div>
+          <button ng-click="generateStats();doAnalysis();" class="btn btn-primary">Upload File</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div ng-if="statsFinished || analysisFinished">
+    <div class="container col-md-2 col-md-offset-5">
+      <ul class="nav nav-pills">
+        <li class="active">
+          <a href="#1b" data-toggle="tab">Stats</a>
+        </li>
+        <li><a href="#2b" data-toggle="tab">Analysis</a>
+        </li>
+      </ul>
+    </div>
+    <div class="tab-content clearfix m-t10">
+      <div ng-if="statsFinished" class="col-md-12 text-center tab-pane active m-t10" id="1b">
+        <ul class="nav nav-pills">
+          <li class="active">
+            <a href="#1a" data-toggle="tab">Applicants</a>
+          </li>
+          <li><a href="#2a" data-toggle="tab">Inventors</a>
+          </li>
+          <li><a href="#3a" data-toggle="tab">Jurisdictions</a>
+          </li>
+          <li><a href="#4a" data-toggle="tab">Kinds</a>
+          </li>
+          <li><a href="#5a" data-toggle="tab">Simple Family Size</a>
+          </li>
+          <li><a href="#6a" data-toggle="tab">Types</a>
+          </li>
+        </ul>
+        <div class="tab-content clearfix">
+          <div class="tab-pane active" id="1a">
+            <table class="col-md-10 table table-bordered table-striped m-t10">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="x in applicants">
+                  <td>{a x.name a}</td>
+                  <td>{a x.count a}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane" id="2a">
+            <table class="col-md-10 table table-bordered table-striped m-t10s">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="x in inventors">
+                  <td>{a x.name a}</td>
+                  <td>{a x.count a}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane" id="3a">
+            <table class="col-md-10 table table-bordered table-striped m-t10">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="x in jurisdictions">
+                  <td>{a x.name a}</td>
+                  <td>{a x.count a}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane" id="4a">
+            <table class="col-md-10 table table-bordered table-striped m-t10">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="x in kinds">
+                  <td>{a x.name a}</td>
+                  <td>{a x.count a}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane" id="5a">
+            <table class="col-md-10 table table-bordered table-striped m-t10">
+              <thead>
+                <tr>
+                  <th>Family Size</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="x in familySizes">
+                  <td>{a x.size a}</td>
+                  <td>{a x.count a}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane" id="6a">
+            <table class="col-md-10 table table-bordered table-striped m-t10">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="x in types">
+                  <td>{a x.name a}</td>
+                  <td>{a x.count a}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 text-center tab-pane" id="2b">
+          <h2 ng-if="!analysisFinished">Analysis is in Progress</h2>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>

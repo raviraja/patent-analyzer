@@ -5,7 +5,14 @@
 
         $scope.doAnalysis = function(){
             var file = $scope.myFile;
-            var uploadUrl = 'http://localhost:5000/analyze_file'   
+            var uploadUrl = 'http://localhost:5000/generate_analysis',
+            promise = fileUploadService.uploadFileToUrl(file, uploadUrl);
+            promise.then(function (response) {
+                $scope.analysisFinished = true;
+                $scope.clusters = response.clusters;
+            }, function () {
+                $scope.serverResponse = 'An error has occurred';
+            });
         };
 
         $scope.generateStats = function () {
